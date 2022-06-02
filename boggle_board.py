@@ -29,11 +29,13 @@ class BoggleBoard:
                   if i % 4 == 0:
                         self.board += '\n'
                   new_letter = x[random.randint(0, 5)]
-                  self.board_list.append(new_letter)
+                  # self.board_list.append(new_letter)
                   if new_letter == 'Q':
                         self.board += new_letter + 'u '
+                        self.board_list.append(new_letter + 'u')
                   else:
                         self.board += new_letter + '  '
+                        self.board_list.append(new_letter)
             self.board += '\n'
 
             print('{:}'.format(self.board))
@@ -41,33 +43,55 @@ class BoggleBoard:
 
             return self.board_list
 
-      def include_word(self):
+      def include_word(self, word):
             temp = []
+            temp2 = []
             horizontal_list = []
             vertical_list = []
             diagonal_list = []
-
+            master_list = []
+            
             for value in self.board_list:
 
                   temp.append(value)
                   if len(temp) == 4:
                         horizontal_list.append(temp)
+                        master_list.append(temp)
+                        master_list.append(temp[::-1])
                         temp = []
 
             for i in range(4):
                   for value in horizontal_list:
                         temp.append(value[i])
                   vertical_list.append(temp)
+                  master_list.append(temp)
+                  master_list.append(temp[::-1])
                   temp = []
-                        
-            print(*vertical_list)
-                  
 
-            print(*horizontal_list)
+            for j,value in enumerate(horizontal_list):
+                  for i, val in enumerate(value):
+                        if j == i:
+                              temp.append(val)
+                        elif i + j == 3:
+                              temp2.append(val)
+
+            diagonal_list.append(temp)
+            master_list.append(temp)
+            master_list.append(temp[::-1])
+            diagonal_list.append(temp2)
+            master_list.append(temp2)
+            master_list.append(temp2[::-1])
+
+
+            # print(*master_list)
+
+            if list(word.upper()) in master_list:
+                  return True 
+            return False
 
 
 
 
 board_new = BoggleBoard()
 board_new.shake()
-board_new.include_word() # => True or False
+print(board_new.include_word('U')) # => True or False
